@@ -57,7 +57,9 @@ def readData(Filename):
 
 def readImg(Filename_1, data_shape):
     mat = []
-    idx = random.randint(0, len(Filename_1)-LEN_SEQ)
+    #idx = random.randint(0, len(Filename_1)-LEN_SEQ)
+    le = len(Filename_1)/LEN_SEQ
+    idx = random.randint(0, le-1)
     img_1 = cv2.imread(Filename_1[idx], cv2.IMREAD_COLOR)
     r,g,b = cv2.split(img_1)
     r = cv2.resize(r, (data_shape[2], data_shape[1]/10))
@@ -71,7 +73,8 @@ def readImg(Filename_1, data_shape):
     b = b.tolist()
 
     for i in range(LEN_SEQ-1):
-        img_2 = cv2.imread(Filename_1[idx+i+1], cv2.IMREAD_COLOR)
+        ret = random.randint((i+1)*le, (i+2)*le-1)
+        img_2 = cv2.imread(Filename_1[idx+ret], cv2.IMREAD_COLOR)
         r_1,g_1,b_1 = cv2.split(img_2)
         r_1 = cv2.resize(r_1, (data_shape[2], data_shape[1]/10))
         g_1 = cv2.resize(g_1, (data_shape[2], data_shape[1]/10))
@@ -183,7 +186,7 @@ if __name__ == '__main__':
 
     model = mx.model.FeedForward(ctx           = devs,
                                  symbol        = network,
-                                 num_epoch     = 400,
+                                 num_epoch     = 300,
                                  learning_rate = 0.003,
                                  momentum      = 0.0015,
                                  wd            = 0.0005,
@@ -198,4 +201,4 @@ if __name__ == '__main__':
 
     eval_metrics = [mx.metric.np(Accuracy)]
     model.fit(X = data_train, eval_data = data_val, eval_metric = eval_metrics, batch_end_callback = batch_end_callbacks)  
-    model.save('./model/rgb_cnn_lstm', 400)
+    model.save('./model/rgb_cnn_lstm', 300)
