@@ -74,7 +74,7 @@ def readImg(Filename_1, data_shape):
 
     for i in range(LEN_SEQ-1):
         ret = random.randint((i+1)*le, (i+2)*le-1)
-        img_2 = cv2.imread(Filename_1[idx+ret], cv2.IMREAD_COLOR)
+        img_2 = cv2.imread(Filename_1[ret], cv2.IMREAD_COLOR)
         r_1,g_1,b_1 = cv2.split(img_2)
         r_1 = cv2.resize(r_1, (data_shape[2], data_shape[1]/10))
         g_1 = cv2.resize(g_1, (data_shape[2], data_shape[1]/10))
